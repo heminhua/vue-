@@ -98,9 +98,18 @@
         methods: {
             //点击添加数据
             addData() {
-                this.list.push({ id: this.newId, name: this.newName, ctime: new Date() });
-                this.newId = '';
-                this.newName = '';
+                // this.list.push({ id: this.newId, name: this.newName, ctime: new Date() });
+                // this.newId = '';
+                // this.newName = '';//这个是假数据
+                var url='http://157.122.54.189:9093/api/addproduct';
+                axios.post(url,{name:this.newName}).then(res=>{
+                    // console.log(res);
+                    if(res.data.status==0){
+                        alert(res.data.message);
+                        this.getList();
+                        this.newName='';
+                    }
+                })
             },
             //根据index删除数据
             delData(index) {
@@ -137,10 +146,12 @@
             //条件搜索
             newList() {
                 var res = this.list.filter(item => item.name.indexOf(this.searchVal) !== -1)
+                // this.searchVal='';//加载后清空内容
                 return res;
             }
         },
         mounted() {
+            //加载完马上显示数据
             this.getList();
         }
     })
