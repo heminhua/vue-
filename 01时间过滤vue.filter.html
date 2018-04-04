@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>时间过滤器</title>
+    <script src="./vue2.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        {{ctime | fullTime('/')}}
+        <p >{{value | capitalize}}</p>
+    </div>
+</body>
+
+</html>
+<script>
+    //全局时间过滤器
+    Vue.filter('fullTime', function (time, a) {
+        // // var data=new Data()
+        // console.log(time);
+        // console.log(time.getFullYear());
+        return time.getFullYear() + a + time.getMonth() + 1 + a + time.getDate()
+    });
+    Vue.filter('capitalize', function (value) {
+        console.log(value);
+        // console.log(typeof value.toString());
+        console.log( value.slice(1));
+        
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+    })
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            ctime: new Date(),
+            message: 'heel',
+            value:'hIdkS'
+        },
+        methods: {
+
+        }
+    })
+</script>
