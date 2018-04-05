@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="./vue2.js"></script>
     <script src="./axios.js"></script>
+    <link rel="stylesheet" href="./animate.css">
     <style>
         #app {
             width: 600px;
@@ -34,6 +35,16 @@
             padding: 5px;
             border: 1px solid black;
             margin-bottom: 10px;
+        }
+
+        .sureDel {
+            width: 200px;
+            height: 80px;
+            background: skyblue;
+            position: absolute;
+            top: 48%;
+            left: 50%;
+            /* transform: translateX(-10%); */
         }
     </style>
 </head>
@@ -64,7 +75,7 @@
                     <td>{{item.id}}</td>
                     <td>{{item.name}}</td>
                     <td>{{item.ctime | ctime('/')}}</td>
-                    <td @click="delData(index)">删除</td>
+                    <td @click="isShowModel(index)">删除</td>
                 </tr>
                 <tr v-if="list.length === 0">
                     <td colspan="4">没有品牌数据</td>
@@ -72,6 +83,14 @@
                 <!-- 动态生成内容tr -->
             </table>
         </div>
+        <!-- 模态框 -->
+        <transition enter-active-class="animated fadeInLeft" leave-active-class="animated fadeOutRight">
+            <div class="sureDel" v-if="isShow">
+                <p>确定要删除{{index}}</p>
+                <button @click='delData'>确定</button>
+                <button @click='isHiddenModel'>取消</button>
+            </div>
+        </transition>
     </div>
 </body>
 
@@ -92,6 +111,8 @@
             newName: '',
             searchVal: '',
             id: '',
+            index:'',
+            isShow: false,
             list: [
             ]
         },
@@ -101,29 +122,40 @@
                 // this.list.push({ id: this.newId, name: this.newName, ctime: new Date() });
                 // this.newId = '';
                 // this.newName = '';//这个是假数据
-                var url='http://157.122.54.189:9093/api/addproduct';
-                axios.post(url,{name:this.newName}).then(res=>{
+                var url = 'http://157.122.54.189:9093/api/addproduct';
+                axios.post(url, { name: this.newName }).then(res => {
                     // console.log(res);
-                    if(res.data.status==0){
-                        alert(res.data.message);
+                    if (res.data.status == 0) {
+                        // alert(res.data.message);
                         this.getList();
-                        this.newName='';
+                        this.newName = '';
                     }
                 })
             },
+            //显示模态框
+            isShowModel(index) {
+                this.isShow = !this.isShow;
+                this.id=this.list[index].id;
+                this.index=index;
+            },
+            //隐藏模态框
+            isHiddenModel(){
+                this.isShow = !this.isShow;
+            },
             //根据index删除数据
-            delData(index) {
+            delData() {
                 // console.log(index);
                 // this.list.splice(index, 1);
-                console.log(this.list[index].id);
-                var url = 'http://157.122.54.189:9093/api/delproduct/' + this.list[index].id;
+                // console.log();
+                var url = 'http://157.122.54.189:9093/api/delproduct/' + this.id;
                 axios.get(url)
                     .then(res => {
                         // console.log(res);
-                            if (res.data.status == 0) {
-                                alert(res.data.message)
-                                this.getList()
-                            } 
+                        if (res.data.status == 0) {
+                            // alert(res.data.message)
+                             this.isShow = !this.isShow;
+                            this.getList()
+                        }
                     })
             },
             //获取商品数据列表

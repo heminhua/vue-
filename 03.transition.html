@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    
+    <link href="./animate.css" rel="stylesheet" type="text/css">
+    <script src="./vue2.js"></script>
+</head>
+
+<body>
+    <div id="example-3">
+        <button @click="show = !show">
+            Toggle render
+        </button>
+        <transition enter-active-class="animated rotateOut" leave-active-class="animated rotateInDownLeft">
+            <p v-if="show">hello</p>
+        </transition>
+    </div>
+</body>
+
+</html>
+<script>
+var vm=new Vue({
+    el:'#example-3',
+    data:{
+        show:true,
+    }
+})
+
+
+</script>
